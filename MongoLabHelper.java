@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by Umut on 13.02.2016.
+ * Created by Umut ONUR on 04.03.2016.
  */
 
 public class MongoLabHelper extends AsyncTask<String, Void, String> {
@@ -36,7 +36,6 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
     private String outputData;
 
     String response = null;
-
 
     private String getApiKey() {
         return "apiKey=" + apiKey;
@@ -162,7 +161,6 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
         }
         return response;
     }
-
 
     public String getCollection(String database, String collection) {
         try {
