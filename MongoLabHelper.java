@@ -109,6 +109,21 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
     private void setCollection(String collection) {
         this.collection = collection;
     }
+    
+    private URL toURL(String urlString) {
+        URL tempUrl = null;
+        try {
+            tempUrl = new URL(urlString);
+            URI uri = new URI(tempUrl.getProtocol(), tempUrl.getUserInfo(), tempUrl.getHost(),
+                    tempUrl.getPort(), tempUrl.getPath(), tempUrl.getQuery(), tempUrl.getRef());
+            tempUrl = uri.toURL();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return tempUrl;
+    }
 
     @Override
     protected String doInBackground(String... params) {
@@ -152,10 +167,8 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
     public String getCollection(String database, String collection) {
         try {
             this.requestMethod = "GET";
-            this.url = new URL(getCollectionURL(collection));
+            this.url = toURL(getCollectionURL(collection));
             response = execute().get();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -167,10 +180,8 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
     public String getCollection(String collection) {
         try {
             this.requestMethod = "GET";
-            this.url = new URL(getCollectionURL(collection));
+            this.url = toURL(getCollectionURL(collection));
             response = execute().get();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -182,10 +193,21 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
     public String getCollection() {
         try {
             this.requestMethod = "GET";
-            this.url = new URL(getCollectionURL());
+            this.url = toURL(getCollectionURL(collection));
             response = execute().get();
-        } catch (MalformedURLException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    public String getCollections() {
+        try {
+            this.requestMethod = "GET";
+            this.url = toURL(getCollectionURL());
+            response = execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -197,10 +219,8 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
     public String getDocument(String docId) {
         try {
             this.requestMethod = "GET";
-            this.url = new URL(getDocumentURL(docId));
+            this.url = toURL(getDocumentURL(docId));
             response = execute().get();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -212,10 +232,8 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
     public String findOne(String query) {
         try {
             this.requestMethod = "GET";
-            this.url = new URL(getFindOneURL(query));
+            this.url = toURL(getFindOneURL(query));
             response = execute().get();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -227,10 +245,8 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
     public String find(String query) {
         try {
             this.requestMethod = "GET";
-            this.url = new URL(getFindURL(query));
+            this.url = toURL(getFindURL(query));
             response = execute().get();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -240,89 +256,59 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
     }
 
     public void insert(JSONObject newData) {
-        try {
-            this.requestMethod = "POST";
-            this.outputData = newData.toString();
-            this.url = new URL(getCollectionURL(collection));
-            execute();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        this.requestMethod = "POST";
+        this.outputData = newData.toString();
+        this.url = toURL(getCollectionURL(collection));
+        execute();
     }
 
     public void insert(JSONArray newData) {
-        try {
-            this.requestMethod = "POST";
-            this.outputData = newData.toString();
-            this.url = new URL(getCollectionURL(collection));
-            execute();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        this.requestMethod = "POST";
+        this.outputData = newData.toString();
+        this.url = toURL(getCollectionURL(collection));
+        execute();
     }
 
     public void update(String docId, JSONObject newData) {
-        try {
-            this.requestMethod = "PUT";
-            this.outputData = "{ $set: " + newData.toString() + " }";
-            this.url = new URL(getDocumentURL(docId));
-            execute();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        this.requestMethod = "PUT";
+        this.outputData = "{ $set: " + newData.toString() + " }";
+        this.url = toURL(getDocumentURL(docId));
+        execute();
     }
 
     public void update(JSONObject newData, String query) {
-        try {
-            this.requestMethod = "PUT";
-            this.outputData = "{ $set: " + newData.toString() + " }";
-            this.url = new URL(getFindURL(query));
-            execute();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        this.requestMethod = "PUT";
+        this.outputData = "{ $set: " + newData.toString() + " }";
+        this.url = toURL(getFindURL(query));
+        execute();
     }
 
     public void updateMany(JSONObject newData, String query) {
-        try {
-            this.requestMethod = "PUT";
-            this.outputData = "{ $set: " + newData.toString() + " }";
-            this.url = new URL(getUpdateManyURL(query));
-            execute();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        this.requestMethod = "PUT";
+        this.outputData = "{ $set: " + newData.toString() + " }";
+        this.url = toURL(getUpdateManyURL(query));
+        execute();
     }
 
     public void upsert(JSONObject newData, String query) {
-        try {
-            this.requestMethod = "PUT";
-            this.outputData = "{ $set: " + newData.toString() + " }";
-            this.url = new URL(getUpdateManyURL(query));
-            execute();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        this.requestMethod = "PUT";
+        this.outputData = "{ $set: " + newData.toString() + " }";
+        this.url = toURL(getUpdateManyURL(query));
+        execute();
     }
 
     public void delete(String docId) {
-        try {
-            this.requestMethod = "DELETE";
-            this.url = new URL(getDocumentURL(docId));
-            execute();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        this.oid = docId;
+        this.requestMethod = "DELETE";
+        this.url = toURL(getDocumentURL(docId));
+        execute();
     }
 
     public int count(String query) {
         try {
             this.requestMethod = "GET";
-            this.url = new URL(getCountURL(query));
-            Log.e("URL", getCountURL(query));
+            this.url = toURL(getCountURL(query));
             response = execute().get();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
