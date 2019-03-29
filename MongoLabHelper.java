@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class MongoLabHelper extends AsyncTask<String, Void, String> {
-    final String baseUrl = "https://api.mongolab.com/api/1/";
+    final String baseUrl = "https://api.mlab.com/api/1/";
 
     private String apiKey = "ZDAi1zTB7g95vbfp31F2Gsp36UMa7Xq5";
     private String database = "veritabani";
@@ -296,7 +296,6 @@ public class MongoLabHelper extends AsyncTask<String, Void, String> {
     }
 
     public void delete(String docId) {
-        this.oid = docId;
         this.requestMethod = "DELETE";
         this.url = toURL(getDocumentURL(docId));
         execute();
